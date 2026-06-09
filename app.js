@@ -174,4 +174,27 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', handleScrollForStats);
     // Initial check
     handleScrollForStats();
+
+    // 6. Scroll Reveal Animation using Intersection Observer
+    const reveals = document.querySelectorAll('.reveal');
+    
+    if ('IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            root: null,
+            threshold: 0.1, // trigger when 10% of element is visible
+            rootMargin: '0px 0px -30px 0px'
+        });
+
+        reveals.forEach(reveal => revealObserver.observe(reveal));
+    } else {
+        // Fallback for older browsers
+        reveals.forEach(reveal => reveal.classList.add('active'));
+    }
 });
